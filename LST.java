@@ -11,9 +11,9 @@
  * SOLUTION
  * This is accomplished in O(E*logV) time
  * First choose the lightest edge going to (V-U) for each node u in set U		= O(E)
- * Add this set of nodes to the MST of graph G									= O(E*logV)
- * We find the MST using PRIM's ALGORITHM for MSTs							-------------------
- * Total time complexity														= O(E*logV)			
+ * Add this set of nodes to the MST of graph G						= O(E*logV)
+ * We find the MST using PRIM's ALGORITHM for MSTs					-----------
+ * Total time complexity								= O(E*logV)			
  * 		
  */
 
