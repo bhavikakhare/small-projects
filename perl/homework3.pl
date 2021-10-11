@@ -12,6 +12,8 @@ use WWW::Mechanize;
 
 use HTML::Strip;
 
+use List::MoreUtils qw/uniq/; # to change mechanise link objects to array of urls
+
 #use Text::FromAny;
 
 # get the webpage
@@ -32,7 +34,9 @@ my $mech = WWW::Mechanize->new();
 
 $mech->get($url);
 
-my @links = @{$mech->find_all_links()};
+my @link_objects = $mech->find_all_links();
+
+my @links = uniq( map { $_->url } @link_objects );
 
 # declare the hashes we will use
 
@@ -41,34 +45,48 @@ my %frequencies = ();
 my %documents = ();
 
 my $word ;
-my @words ;
+# my @words ;
+
+# get the links in the right format and remove presentations or emailIDs
+
+@links = grep {!/\.edu|\.ppt|\.txt|.pdf/}@links ; 
 
 foreach my $link(@links) {
 
-    unless ( $link->[0] =~ /^http?:\/\//i || $link->[0] =~ /^https?:\/\//i ) {
+    unless ( $link =~ /^http?:\/\//i || $link =~ /^https?:\/\//i ) {
 
-        $link->[0] = "$url" . $link->[0] ;
+        $link = "$url" . $link ;
     
     }
 
-    print "\n\t$link->[0]\n";
+    print "\n\t$link\n";
 
-    crawl( \$link->[0] , \%frequencies , \%documents , \@words );
+    crawl( $link , \%frequencies );
 
 }
+
+my $ct = scalar %frequencies ;
+
+print "\nreturned + $ct" ;
 
 # now we print the words sorted
 
 foreach $word ( sort keys %frequencies ) { # make sure this way to write sort works C
 
-    # print sum of frequencies instead C
+    print "\nlooping" ;
+
     # print document count
 
     my $sum = 0 ;
-    foreach my $link(@links) {
-        $sum = sum( fre , $sum );
+    my $size = 0 ;
+    foreach my $link(@links) { # do i need to check if $f($w) is an existing hash ?
+        $sum = sum( $frequencies{$word}{$link} , $sum );
+        if($frequencies{$word}{$link}>0) {
+            $size = $size +1 ;
+        }
     }
-    print "\t $word \t\t $frequencies{$word} \n";
+    # $size = keys $frequencies{$word} ;
+    print "\t $word \t\t $sum\t $size \n";
 
 }
 
@@ -76,7 +94,22 @@ foreach $word ( sort keys %frequencies ) { # make sure this way to write sort wo
 
 sub crawl { 
 
-    my ( $link , %frequencies , %documents , %words ) = @_ ;
+    # my ( $link , $frequencies , $words ) = @_ ;
+    # %frequencies = %{$frequencies};
+    # @words = @{$words};
+
+    my $link = shift ;
+    my $frequencies = shift ;
+    print scalar "\n%frequencies" ;
+    my %frequencies = %{$frequencies} ;
+    # my $words = shift ;
+    # my @words = @{$words} ;
+
+    print "\non $link with $frequencies :)" ;
+    
+    # my $ct = scalar %frequencies ;
+
+    # print "\ncrawling + $ct" ;
 
     # if pdf
 
@@ -131,10 +164,22 @@ sub crawl {
     while ( $word = pop @words ) {
 
         # add to that document frequency C
+        if(exists($frequencies{$word})){
+            $frequencies{$word}{$link}++ ;
+        } else {
+            my %f = () ;
+            $frequencies{$word} = \%f ;
+            $frequencies{$word}{$link} =1 ;
+        }
 
-        $documents{$word}{$link}++;
+        # print "$word + $frequencies{$word}{$link} + $link\n" ;
 
     }
 
-}
+    $ct = scalar %frequencies ;
 
+    print "\nreturning + $ct" ;
+
+    return;
+
+}
