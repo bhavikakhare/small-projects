@@ -1,0 +1,76 @@
+# WAP2 preprocess text in input folder & remove stopwords from english_stopwords.txt BY B KHARE :)
+use warnings;
+use strict;
+use HTML::Strip;
+use File::Slurp;
+use Lingua::Stem;
+
+my $stemmer = Lingua::Stem->new( -locale => 'EN-UK' ) ;
+
+my $folder = shift @ARGV;
+my $stopwords_file = "$folder/english_stopwords.txt" ;
+my @stopwords ;
+my $file ;
+
+open( STOPWORDS , '<', $stopwords_file )
+  or die("can not open output file to print it \n\n");
+
+while (<STOPWORDS>) {
+    push( @stopwords , $_ );
+}
+
+close(STOPWORDS);
+
+my @files = <$folder/*.txt> ;
+opendir(F, $folder) or die "Could not open $folder\n" ;
+
+foreach my $file (@files) {
+# while ( $file = readdir(F) ) {
+
+    next if( $file eq "$folder/english_stopwords.txt" ) ;
+
+        # open( FILE , $file )
+        #   or die("can not open \n\n") ;
+        my $content = read_file($file) ;
+        # my $request = new HTTP::Request( 'GET', $link );
+        # my $response = $ua->request($request);
+        # # extract HTML content
+        # my $content = $response->content();
+        # die "\t Couldn't get content ! :( \n\n" unless defined $content;
+
+        # strip the HTML tags from it to get pure text
+        my $hs = HTML::Strip->new() ;
+        my $text = $hs->parse($content) ;
+        $hs->eof;
+
+        # for each file with text $text
+        $text =~ s/http(\S)*//g ;
+        $text =~ tr/[A-Z]/[a-z]/ ;
+        $text =~ tr/a-z/ /cs ;
+        # for each word $stopword
+        # my $stopword = "to" ;
+        # @stopwords = ("to","a","is") ;
+        foreach my $stopword(@stopwords) {
+            $stopword =~ s/\n//g ;
+            my $re = qr/$stopword/ ;
+            $text =~ s/ ${re} / /gs ;
+            # print "aa$stopword bb" ;
+        }
+
+        my @words = split( ' ', $text ) ;
+        $stemmer->stem_in_place(@words) ;
+        $text = join( ' ' , @words ) ;
+
+        print "\n\t$text \n" ;
+
+}
+
+closedir(F);
+
+
+
+
+# put text in file
+
+# perl -lpe 'BEGIN{open(A,"file1"); chomp(@k = <A>)} 
+#                  for $w (@k){s/\b\Q$w\E\b//ig}' file2 
