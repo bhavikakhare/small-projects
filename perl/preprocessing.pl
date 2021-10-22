@@ -7,6 +7,8 @@ use Lingua::Stem;
 
 my $stemmer = Lingua::Stem->new( -locale => 'EN-UK' ) ;
 
+# find the file of stopwords and store stopwords in a list 
+
 my $folder = shift @ARGV;
 my $stopwords_file = "$folder/english_stopwords.txt" ;
 my @stopwords ;
@@ -21,8 +23,10 @@ while (<STOPWORDS>) {
 
 close(STOPWORDS);
 
+# fine & open & loop over all files in hw4 directory
+
 my @files = <$folder/*.txt> ;
-opendir(F, $folder) or die "Could not open $folder\n" ;
+opendir(F, $folder) or die "could not open $folder\n" ;
 
 foreach my $file (@files) {
 # while ( $file = readdir(F) ) {
@@ -57,20 +61,18 @@ foreach my $file (@files) {
             # print "aa$stopword bb" ;
         }
 
+        # stem words
         my @words = split( ' ', $text ) ;
         $stemmer->stem_in_place(@words) ;
         $text = join( ' ' , @words ) ;
 
-        print "\n\t$text \n" ;
+        # save the preprocessed text in hw5_input directory
+        $file = substr $file , 4 ;
+        open( FILEOUT , '>', "hw5_input/$file.txt" )
+            or die("can not open output $file to print it \n\n");
+        print FILEOUT "$text" ;
 
 }
 
 closedir(F);
-
-
-
-
-# put text in file
-
-# perl -lpe 'BEGIN{open(A,"file1"); chomp(@k = <A>)} 
-#                  for $w (@k){s/\b\Q$w\E\b//ig}' file2 
+close(FILEOUT);
