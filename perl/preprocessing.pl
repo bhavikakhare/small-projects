@@ -58,7 +58,7 @@ foreach my $file (@files) {
             $stopword =~ s/\n//g ;
             my $re = qr/$stopword/ ;
             $text =~ s/ ${re} / /gs ;
-            # print "aa$stopword bb" ;
+            # print "aa $stopword bb" ;
         }
 
         # stem words
