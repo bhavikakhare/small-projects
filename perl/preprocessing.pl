@@ -1,4 +1,5 @@
 # WAP2 preprocess text in input folder & remove stopwords from english_stopwords.txt BY B KHARE :)
+# run in cmd with "perl preprocessing.pl hw4_input" and have hw4_input(text-files) & hw5_input(empty) preferably be existing directories in the same directory as preprocessing.pl
 use warnings;
 use strict;
 use HTML::Strip;
