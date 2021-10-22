@@ -1,0 +1,115 @@
+Search this site
+
+Dr. Vasile Rus - Personal Page
+
+Home
+
+Research
+
+Teaching
+
+Advising and Mentoring
+
+Publications
+
+Dr. Vasile Rus - Personal Page
+
+Home
+
+Research
+
+Teaching
+
+Advising and Mentoring
+
+Publications
+
+More
+
+Home
+
+Research
+
+Teaching
+
+Advising and Mentoring
+
+Publications
+
+Dr. Vasile Rus
+
+Lead Principal Investigator of the NSF-funded Learner Data Institute
+
+Vasile Rus, Ph.D.
+
+Photo cca. 2019
+
+CURRENT POSITION
+
+Professor Director of the Data Science Masters Program Co-Director of the Data Science Research Cluster Systems Testing Research Fellow of the Fedex Institute of Technology Department of Computer Science (CS) Institute for Intelligent Systems (IIS) The University of Memphis
+
+CONTACT INFO
+
+Phone: +1 (901) 678 5259 Email: vrus @ memphis.edu Fax: (901) 678 2480 Address: 375 Dunn Hall The University of Memphis Memphis, TN 38152, USA
+
+Overall MISSION
+
+To harness the data revolution to further our understanding of how people learn, how to improve adaptive instructional systems (AISs), and how to make emerging learning ecologies that include online and blended learning with AISs more effective, efficient, engaging, equitable, relevant, and affordable. See the NSF-funded Learner Data Institute award: The Learner Data Institute: Harnessing The Data Revolution To Make The Learning Ecosystem More Effective, Efficient, and Engaging (Currently Funded Amount: $2,584,309.00; 2019-2021; Phase 2: 15 million for 5 years – to be applied for); https://www.nsf.gov/awardsearch/showAward?AWD_ID=1934745&HistoricalAwards=false). www.learnerdatainstitute.org
+
+SHORT BIO
+
+Dr. Rus is a Professor of Computer Science at The University of Memphis where he also heads the Data Science Research Cluster, a university-wide effort to define and pursue a vision for data science research, education, and outreach, as well as the Masters of Science in Data Science program. Dr. Rus has served in other leadership and administrative roles such as Graduate Coordinator in Computer Science, chairing faculty and instructor search committees, faculty senator, chairing the university-wide Faculty Policies committee, College Tenure and Promotion committee, Graduate Admissions committee, and chairing the Faculty Awards committee. Dr. Rus' academic career accomplishments are numerous including a professorship, several best paper awards (all of them with my advisees), and multi-million federally funded grants. Dr. Rus has a joint position in Computer Science and the Institute for Intelligent Systems where he has been interacting with Cognitive Scientists on developing adaptive educational technologies. He is also a Research Fellow of the Fedex Institute of Technology. Dr. Rus' research interests are at the intersection of human and machine learning and intelligent interactive systems. His overall research goal is to harness the data revolution to make the learning ecosystem more effective, equitable, engaging, efficient, relevant, and affordable. More specifically, Dr. Rus combines machine learning, statistical, and computational linguistics techniques to infer models that take advantage of the rich (large and diverse) sources of data available to address big challenges in the learning ecosystem. He has been developing advanced, optimized models from structured, semi-structured, and free-structure, i.e. text, data collections using both supervised and unsupervised techniques. For instance, Dr. Rus has been exploring Bayesian methods through the development of hierarchical models, sequential data models based on Hidden Markov Models, Maximum Entropy Models, Conditional Random Fields, reinforcement learning approaches, statistical relational methods such as Markov Logic, and deep neural network models, as well as unsupervised, semi-supervised, co-training, and active learning methods. Dr. Rus focuses on two broad impact applications which are both a type of intelligent interactive systems: dialogue-based intelligent tutoring systems and carebots (healthcare bots – this is a new application area he is moving into). Dr. Rus has served in various roles (PI or co-PI) on research projects funded by the National Science Foundation, Department of Defense, Department of Education, and private companies, and produced more than 150 peer-reviewed publications in major venues. For instance, he is currently a PI and co-PI on FOUR major NSF grants totaling $7,185,962.00
+
+CURRENT PROJECTS
+
+Dr. Rus is currently a PI and co-PI on FOUR major NSF grants totaling $7,185,962.00 and co-PI on ONE DoD project: Current NSF Projects: The Learner Data Institute: Harnessing The Data Revolution To Make The Learning Ecosystem More Effective, Efficient, and Engaging (Currently Funded Amount: $2,584,309.00; 2019-2021; Phase 2: 15 million for 5 years – to be applied for); https://www.nsf.gov/awardsearch/showAward?AWD_ID=1934745&HistoricalAwards=false). Investigating techniques that couple Markov Logic and Deep Learning with applications to discovering strategies to improve STEM learning (Amount: $413,482.00.00, 2020-2023; https://www.nsf.gov/awardsearch/showAward?AWD_ID=2008812&HistoricalAwards=false). Advancing the Science of Learning Data Science with Adaptive Learning for Future Workforce Development, (Amount: $3,439,035.00; 2020-2025; https://www.nsf.gov/awardsearch/showAward?AWD_ID=1918751&HistoricalAwards=false). Collaborative Research: CSEdPad: Investigating and Scaffolding Students' Mental Models during Computer Programming Tasks to Improve Learning, Engagement, and Retention (Amount: $749,136.00; a collaborative project with Peter Brusilovsky at The University of Pittsburgh whose portion of the budget is $250k; Period: 2018-2021; https://www.nsf.gov/awardsearch/showAward?AWD_ID=1822816&HistoricalAwards=false). Generalized Intelligent Framework for Tutors (GIFT) Expert Series, funded – Army Research Lab, co-PI, [$2,300,000.00], 2018-2023. www.gifttutoring.org
+
+RECENT NEWS
+
+Dr. Rus received a new NSF award entitled Investigating techniques that couple Markov Logic and Deep Learning with applications to discovering strategies to improve STEM learning (Amount: $413,482.00.00, 2020-2023; https://www.nsf.gov/awardsearch/showAward?AWD_ID=2008812&HistoricalAwards=false).
+
+Dr. Rus co-edited a new book: Sinatra, A.M., Graesser, A.C., Hu, X., Brawner, K., and Rus, V. (Eds.). (2019). Design Recommendations for Intelligent Tutoring Systems: Volume 7 - Self-Improving Systems. Orlando, FL: U.S. Army Research Laboratory. ISBN 978-0-9977257-7-3.
+
+Dr. Rus received a very prestigious NSF award called The Learner Data Institute ($2.588 milion; 2020-2021) to lay the foundation of a Data Science institute for learner data. The Learner Data Institute's mission is to harness the data revolution to further our understanding of how people learn, how to improve adaptive instructional systems (AISs), and how to improve the learning ecosystem's effectiveness and cost-efficiency as well as learners and instructors' engagement and satisfaction while learning with technology.
+
+Dr. Rus is Program Chair for Memphis DATA - A Data Science Conference to be held on March 29, 2019. See details here .
+
+Dr. Rus is General Chair for The 32nd International Conference of the Florida Artificial Intelligence Research Society (FLAIRS-32). Consider submitting a paper here .
+
+Dr. Rus serves on the Advisory Board for Army's GIFT project (Generalized Intelligent Framework for Tutoring). See here .
+
+Dr. Rus received a new, 3-year NSF award for the amount of $749,136.00 starting September 1, 2018. This is in collaboration with Dr. Scott Fleming at The University of Memphis and Dr. Peter Brusilovsky at The University of Pittsburgh.
+
+Dr. Rus will deliver a Keynote Talk at The 2018 IEEE 14th International Conference on Intelligent Computer Communication and Processing.
+
+Dr. Rus was part of an OECD panel on Computers and the Future of Skill Demand. See the report here.
+
+Nabin Maharjan, a doctoral student in our lab, has won 3rd Place at the Annual Computer Science Day, poster section. CONGRATULATIONS! (2018)
+
+Rajendra Banjade won 1st Place at the Annual Student Research Forum (2017).
+
+Dr. Rus and Dr. Stefanescu won BEST PAPER AWARD at the 2nd International Conference on Smart Learning Environment (ICSLE 2015) for their paper entitled "Towards Non-Intrusive Assessment in Dialogue-based Intelligent. Tutoring Systems". An extended journal version has been published [PDF] .
+
+Our team, NeRoSim, has won the semantic textual similarity competition at SemEval-2015, the premier forum for semantic evaluation. We participated in two tasks: the English semantic textual similarity (STS) task and the interpretable STS task. We WON both the English STS task and the interpretable STS task. See details in the organizers' report, which is available here. Note that for the English STS task we were ranked 10th out of 74 system runs but there was no significant difference among the top 10 system runs as the organizers' report clearly states. For the interpretable STS we were ranked 1st for the 'Headlines' data and 2nd for the 'Images' data, which is the best performance overall (for both datasets) of any team. For whatever reasons, the organizers did not report overall ranking for the whole interpretable STS - they chose to report results separately on the Headlines and Images data subsets for the interpretable STS task.
+
+We proudly announce the release of SEMILAR: The Semantic Similarity Toolkit. See it here: SEMILAR.
+
+PhD student Nobal Niraula won the big prize at the 2013 CS Research Day for his work on "Task Learning From the Web for Virtual Assistants." This was joint work with Dr. Amanda Stent at AT&T Research Labs.
+
+Dr. Vasile Rus and his PhD student, Nobal Niraula, won BEST PAPER AWARD at The 13th Internatioanl Conference on Computational Linguistics (CICLing 2012) for the paper "Automated Detection of Local Coherence in Short Essays Based on Centering Theory". See details here.
+
+Archana Bhattarai, a PhD student advised by Dr. Vasile Rus, won the top prize at the Computer Science Research Day 2011. Congratulations!
+
+Dr. Rus was appointed Associate Editor of the International Journal on Artificial Intelligence Tools.
+
+Dr. Rus was awarded $1.65 mil. by the Institute for Education Sciences to develop DeepTutor, an advanced intelligent tutoring system that integrates deep natural language and discourse processing with the science education framework of learning progressions to address some key issues in tutoring systems with natural language interactions. Learn more about DeepTutor at www.deeptutor.org.
+
+Report abuse
+
+Page details
+
+Page updated
+
+Google Sites
+
+Report abuse

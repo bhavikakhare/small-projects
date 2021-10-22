@@ -1,0 +1,1103 @@
+PageRank: Standing on the shoulders of giants
+Massimo Franceschet
+Department of Mathematics and Computer Science
+University of Udine
+Via delle Scienze 206, 33100 Udine, Italy
+
+arXiv:1002.2858v3 [cs.IR] 14 Aug 2010
+
+massimo.franceschet@uniud.it
+
+Keywords
+PageRank, Web information retrieval, Bibliometrics, Sociometry, Econometrics.
+
+1.
+
+INTRODUCTION
+
+PageRank [3] is a Web page ranking technique that has been
+a fundamental ingredient in the development and success of
+the Google search engine. The method is still one of the
+many signals that Google uses to determine which pages are
+most important.1 The main idea behind PageRank is to
+determine the importance of a Web page in terms of the
+importance assigned to the pages hyperlinking to it. In fact,
+this thesis is not new, and has been previously successfully
+exploited in different contexts. We review the PageRank
+method and link it to some renowned previous techniques
+that we have found in the fields of Web information retrieval,
+bibliometrics, sociometry, and econometrics.
+
+2.
+
+WEB INFORMATION RETRIEVAL
+
+In 1945 Vannevar Bush wrote a today celebrated article in
+The Atlantic Monthly entitled “As We May Think” describing a futuristic device he called Memex [5]. Bush writes:
+“Wholly new forms of encyclopedias will appear,
+ready made with a mesh of associative trails running through them, ready to be dropped into the
+Memex and there amplified.”
+Bush’s prediction came true in 1989, when Tim Berners-Lee
+proposed the Hypertext Markup Language (HTML) to keep
+track of experimental data at the European Organization
+for Nuclear Research (CERN). In the original far-sighted
+proposal in which Berners-Lee attempts to persuade CERN
+management to adopt the new global hypertext system we
+can read the following paragraph2 :
+1
+2
+
+http://www.google.com/corporate/tech.html
+http://www.w3.org/History/1989/proposal.html
+
+“We should work toward a universal linked information system, in which generality and portability are more important than fancy graphics techniques and complex extra facilities. The aim would
+be to allow a place to be found for any information or reference which one felt was important,
+and a way of finding it afterwards. The result
+should be sufficiently attractive to use that the
+information contained would grow past a critical
+threshold.”
+
+As we all know, the proposal was accepted and later implemented in a mesh – this was the only name that Berners-Lee
+originally used to describe the Web – of interconnected documents that rapidly grew beyond the CERN threshold, as
+Berners-Lee anticipated, and became the World Wide Web.
+Today, the Web is a huge, dynamic, self-organized, and hyperlinked data source, very different from traditional document collections which are nonlinked, mostly static, centrally collected and organized by specialists. These features
+make Web information retrieval quite different from traditional information retrieval and call for new search abilities,
+like automatic crawling and indexing of the Web. Moreover,
+early search engines ranked responses using only a content
+score, which measures the similarity between the page and
+the query. One simple example is just a count of the number of times the query words occur on the page, or perhaps
+a weighted count with more weight on title words. These
+traditional query-dependent techniques suffered under the
+gigantic size of the Web and the death grip of spammers.
+In 1998, Sergey Brin and Larry Page revolutionised the field
+of Web information retrieval by introducing the notion of an
+importance score, which gauges the status of a page, independently from the user query, by analysing the topology of
+the Web graph. The method was implemented in the famous
+PageRank algorithm and both the traditional content score
+and the new importance score were efficiently combined in
+a new search engine named Google.
+
+3. RANKING WEB PAGES USING PAGERANK
+We briefly recall how the PageRank method works keeping
+the mathematical machinery to the minimum. Interested
+readers can more thoroughly investigate the topic in a recent
+book of Langville and Meyer which elegantly describes the
+
+science of search engine rankings in a rigorous yet playful
+style [15].
+We start by providing an intuitive interpretation of PageRank in terms of random walks on graphs [21]. The Web is
+viewed as a directed graph of pages connected by hyperlinks.
+A random surfer starts from an arbitrary page and simply
+keeps clicking on successive links at random, bouncing from
+page to page. The PageRank value of a page corresponds
+to the relative frequency that the random surfer visits that
+page, assuming that the surfer goes on infinitely. The more
+time spent by the random surfer on a page, the higher the
+PageRank importance of the page.
+A little more formally, the method can be described as follows. Let us denote by qi the number of distinct outgoing
+(hyper)links of page i. Let H = (hi,j ) be a square matrix of size equal to the number n of Web pages such that
+hi,j = 1/qi if there exists a link from page i to page j and
+hi,j = 0 otherwise. The value hi,j can be interpreted as
+the probability that the random surfer moves from page i to
+page j by clicking on one of the distinct links of page i. The
+PageRank πj of page j is recursively defined as:
+X
+πi hi,j
+πj =
+
+I
+1.6
+
+H
+1.6
+
+L
+1.6
+
+M
+1.6
+
+E
+8.1
+
+F
+3.9
+
+B
+38.4
+
+D
+3.9
+
+C
+34.3
+
+A
+3.3
+
+G
+1.6
+
+Figure 1: A PageRank instance with solution. Each
+node is labelled with its PageRank score. Scores
+have been normalized to sum to 100. We assumed
+α = 0.85.
+
+i
+
+or, in matrix notation, π = πH. Hence, the PageRank of
+page j is the sum of the PageRank scores of pages i linking
+to j, weighted by the probability of going from i to j. In
+words, the PageRank thesis reads as follows:
+A Web page is important if it is pointed to by
+other important pages.
+
+dangling page by jumping to a randomly chosen page. We
+call S the resulting matrix.
+The second problem with the ideal model is that the surfer
+can get trapped into a bucket of the Web graph, which is a
+reachable strongly connected component without outgoing
+edges towards the rest of the graph. The solution proposed
+by Brin and Page is to replace matrix S by the Google matrix
+G = αS + (1 − α)E
+
+There are in fact three distinct factors that determine the
+PageRank of a page: (i) the number of links it receives, (ii)
+the link propensity, that is, the number of outgoing links,
+of the linking pages, and (iii) the PageRank of the linking
+pages. The first factor is not surprising: the more links a
+page receives, the more important it is perceived. Reasonably, the link value depreciates proportionally to the number of links given out by a page: endorsements coming from
+parsimonious pages are worthier than those emanated by
+spendthrift ones. Finally, not all pages are created equal:
+links from important pages are more valuable than those
+from obscure ones.
+Unfortunately, this ideal model has two problems that prevent the solution of the system. The first one is due to the
+presence of dangling nodes, that are pages with no forward
+links.3 These pages capture the random surfer indefinitely.
+Notice that a dangling node corresponds to a row in matrix H with all entries equal to 0. To tackle the problem of
+dangling nodes, the corresponding rows in H are replaced
+by the uniform probability vector u = 1/n e, where e is a
+vector of length n with all components equal to 1. Alternatively, one may use any fixed probability vector in place
+of u. This means that the random surfer escapes from the
+
+where E is the teleportation matrix with identical rows each
+equal to the uniform probability vector u, and α is a free
+parameter of the algorithm often called the damping factor.
+Alternatively, a fixed personalization probability vector v
+can be used in place on u. In particular, the personalization
+vector can be exploited to bias the result of the method
+towards certain topics. The interpretation of the new system
+is that, with probability α the random surfer moves forward
+by following links, and, with the complementary probability
+1−α the surfer gets bored of following links and enters a new
+destination in the browser’s URL line, possibly unrelated
+to the current page. The surfer is hence teleported, like a
+Star Trek character, to that page, even if there exists no
+link connecting the current and the destination pages in the
+Web universe. The inventors of PageRank propose to set
+the damping factor α = 0.85, meaning that after about five
+link clicks the random surfer chooses a random page.
+The PageRank vector is then defined as the solution of equation:
+
+π = πG
+
+(1)
+
+3
+
+The term dangling refers to the fact that many dangling
+nodes are in fact pendent Web pages found by the crawling
+spiders but whose links have not been yet explored.
+
+An example is provided in Figure 1. Node A is a dangling
+node, while nodes B and C form a bucket. Notice the dy-
+
+namics of the method: page C receives just one link but from
+the most important page B; its importance is much higher
+than that of page E, which receives many more links, but
+from anonymous pages. Pages G, H, I, L, and M do not receive endorsements; their scores correspond to the minimum
+amount of status of each page.
+
+Year
+1906
+1907
+1912
+1929
+
+P
+Typically, the normalization condition
+i πi = 1 is also
+added. In this case Equation 1 becomes π = απS + (1 −
+α)u. The latter distinguishes two factors contributing to the
+PageRank vector: an endogenous factor equal to πS which
+takes into consideration the real topology of the Web graph,
+and an exogenous factor equal to the uniform probability
+vector u, which can be interpreted as a minimal amount of
+status assigned to each page independently of the hyperlink
+graph. The parameter α balances between these two factors.
+
+1941
+1949
+1952
+1953
+1965
+1976
+1998
+1998
+
+Author
+Markov
+Perron
+Frobenius
+von Mises &
+Pollaczek-Geiringer
+Leontief
+Seeley
+Wei
+Katz
+Hubbell
+Pinski & Narin
+Kleinberg
+Brin & Page
+
+Contribution
+Markov theory [19]
+Perron theorem [23]
+Perron-Frobenius theorem [6]
+Power method [30]
+Econometric model [17]
+Sociometric model [28]
+Sport ranking model [31]
+Sociometric model [10]
+Sociometric model [9]
+Bibliometric model [25]
+HITS [13]
+PageRank [3]
+
+Table 1: PageRank history.
+
+4.
+
+COMPUTING THE PAGERANK VECTOR
+
+Does Equation 1 have a solution? Is the solution unique?
+Can we efficiently compute it? The success of the PageRank
+method rests on the answers to these queries. Luckily, all
+these questions have nice answers.
+Thanks to the dangling nodes patch, matrix S is a stochastic matrix4 , and clearly the teleportation matrix E is also
+stochastic. It follows that G is stochastic as well, since it is
+defined as a convex combination of stochastic matrices S and
+E. It is easy to show that, if G is stochastic, Equation 1 has
+always at least one solution. Hence, we have got at least one
+PageRank vector. Having two independent PageRank vectors, however, would be already too much: which one should
+we use to rank Web pages? Here, a fundamental result of
+algebra comes to the rescue : Perron-Frobenius theorem [23,
+6]. It states that, if A is an irreducible5 nonnegative square
+matrix, then there exists a unique vector
+Px, called the Perron
+vector, such that xA = rx, x > 0, and i xi = 1, where r is
+the maximum eigenvalue of A in absolute value, that algebraists call the spectral radius of A. The Perron vector is the
+left dominant eigenvector of A, that is, the left eigenvector
+associated with the largest eigenvalue in magnitude.
+The matrix S is most likely reducible, since experiments
+have shown that the Web has a bow-tie structure fragmented
+into four main continents that are not mutually reachable, as
+first observed in [4]. Thanks to the teleportation trick, however, the graph of matrix G is strongly connected. Hence G
+is irreducible and Perron-Frobenius theorem applies6 . Therefore, a positive PageRank vector exists and is furthermore
+unique.
+Interestingly, we can arrive at the same result using Markov
+theory [19]. The above described random walk on the Web
+graph, modified with the teleportation jumps, naturally induces a finite-state Markov chain, whose transition matrix
+is the stochastic matrix G. Since G is irreducible, the chain
+has a unique stationary distribution corresponding to the
+PageRank vector.
+4
+
+This simply means that all rows sum up to 1.
+A matrix is irreducible if and only if the directed graph
+associated with it is strongly connected, that is, for every
+pair i and j of graph nodes there are paths leading from i
+to j and from j to i.
+6
+Since G is stochastic, its spectral radius is 1.
+5
+
+A last crucial question remains: can we efficiently compute
+the PageRank vector? The success of PageRank is largely
+due to the existence of a fast method to compute its values: the power method, a simple iteration method to find
+the dominant eigenpair of a matrix developed by von Mises
+and Pollaczek-Geiringer [30]. It works as follows on the
+Google matrix G. Let π (0) = u = 1/n e. Repeatedly compute π (k+1) = π (k) G until ||π (k+1) − π (k) || < ǫ, where || · ||
+measures the distance between the two successive PageRank
+vectors and ǫ is the desired precision.
+The convergence rate of the power method is approximately
+the rate at which αk approaches to 0: the closer α to unity,
+the lower the convergence speed of the power method. If, for
+instance, α = 0.85, as many as 43 iterations are sufficient to
+gain 3 digits of accuracy, and 142 iterations are enough for
+10 digits of accuracy. Notice that the power method applied
+to matrix G can be easily expressed in terms of matrix H,
+which, unlike G, is a very sparse matrix that can be stored
+using a linear amount of memory with respect to the size of
+the Web.
+
+5. STANDING ON THE SHOULDERS OF GIANTS
+Dwarfs standing on the shoulders of giants is a Western
+metaphor meaning “One who develops future intellectual
+pursuits by understanding the research and works created
+by notable thinkers of the past”.7 The metaphor was famously uttered by Isaac Newton: “If I have seen a little
+further it is by standing on the shoulders of Giants”. Moreover, “Stand on the shoulders of giants” is Google Scholar’s
+motto: “the phrase is our acknowledgement that much of
+scholarly research involves building on what others have already discovered”.
+There are many giants upon whose shoulders PageRank firmly
+stands: Markov [19], Perron [23], Frobenius [6], von Mises
+and Pollaczek-Geiringer [30] provided at the beginning of the
+1900’s the necessary mathematical machinery to investigate
+and effectively solve the PageRank problem. Moreover, the
+circular PageRank thesis has been previously exploited in
+7
+From the Wikipedia page for Standing on the shoulders of
+giants.
+
+i.e., li,j = 1 if page i links to page j and li,j = 0 otherwise.
+We denote with LT the transpose of L. HITS defines a pair
+of recursive equations as follows, where x is the authority
+vector containing the authority scores and y is the hub vector
+containing the hub scores:
+
+I
+0.0
+14.9
+
+x(k)
+y (k)
+
+H
+0.0
+14.9
+
+L
+0.0
+6.8
+
+M
+0.0
+6.8
+
+E
+38.9
+9.9
+
+F
+5.3
+14.9
+
+D
+5.3
+8.9
+
+B
+45.9
+0.0
+
+C
+0.0
+8.1
+
+A
+4.7
+0.0
+
+G
+0.0
+14.9
+
+Figure 2: A HITS instance with solution (compare
+with PageRank scores in Figure 1). Each node is
+labelled with its authority (top) and hub (bottom)
+scores. Scores have been normalized to sum to 100.
+The dominant eigenvalue for both authority and hub
+matrices is 10.7.
+
+different contexts, including Web information retrieval, bibliometrics, sociometry, and econometrics. In the following,
+we review these contributions and link them to the PageRank method. Table 1 contains a brief summary of PageRank history. All the ranking techniques surveyed in this
+paper have been implemented in R [26] and the code is freely
+available at the author’s Web page.
+
+5.1 Hubs and authorities on the Web
+Hypertext Induced Topic Search (HITS) is a Web page ranking method proposed by Jon Kleinberg [13, 14]. The connections between HITS and PageRank are striking. Despite the
+close conceptual, temporal and even geographical proximity
+of the two approaches, it appears that HITS and PageRank
+have been developed independently. In fact, both papers
+presenting PageRank [3] and HITS [14] are today citational
+blockbusters: the PageRank article collected 6167 citations,
+while the HITS paper has been cited 4617 times.8
+HITS thinks of Web pages as authorities and hubs. HITS
+circular thesis reads as follows:
+Good authorities are pages that are pointed to by
+good hubs and good hubs are pages that point to
+good authorities.
+Let L = (li,j ) be the adjacency matrix of the Web graph,
+8
+
+Source: Google Scholar on February 5, 2010.
+
+=
+=
+
+LT y (k−1)
+Lx(k)
+
+(2)
+
+where k ≥ 1 and y (0) = e, the vector of all ones. The first
+equation tells us that authoritative pages are those pointed
+to by good hub pages, while the second equation claims that
+good hubs are pages that point to authoritative pages. Notice that Equation 2 is equivalent to:
+
+x(k)
+y (k)
+
+= LT Lx(k−1)
+= LLT y (k−1)
+
+(3)
+
+It follows that the authority vector x is the dominant right
+eigenvector of the authority matrix A = LT L, and the hub
+vector y is the dominant right eigenvector of the hub matrix
+H = LLT . This is very similar to the PageRank method,
+except the use of the authority and hub matrices instead of
+the Google matrix.
+To compute the dominant eigenpair (eigenvector and eigenvalue) of the authority matrix we can again exploit the
+power method as follows: let x(0) = e. Repeatedly compute x(k) = Ax(k−1) and normalize x(k) = x(k) /m(x(k) ),
+where m(x(k) ) is the signed component of maximal magnitude, until the desired precision is achieved. It follows that
+x(k) converges to the dominant eigenvector x (the authority
+vector) and m(x(k) ) converges to the dominant eigenvalue
+(the spectral radius, which is not necessarily 1). The hub
+vector y is then given by y = Lx. While the convergence of
+the power method is guaranteed, the computed solution is
+not necessarily unique, since the authority and hub matrices are not necessarily irreducible. A modification similar to
+the teleportation trick used for the PageRank method can
+be applied to HITS to recover the uniqueness of the solution [34].
+An example of HITS is given in Figure 2. We stress the
+difference among importance, as computed by PageRank,
+and authority and hubness, as computed by HITS. Page B
+is both important and authoritative, but it is not a good
+hub. Page C is important but by no means authoritative.
+Pages G, H, I are neither important nor authoritative, but
+they are the best hubs of the network, since they point to
+good authorities only. Notice that the hub score of B is 0
+although B has one outgoing edge; unfortunately for B, the
+only page C linked by B has no authority. Similarly, C has
+no authority because it is pointed to only by B, whose hub
+score is zero. This shows the difference between indegree
+and authority, as well as between outdegree and hubness.
+Finally, we observe that nodes with null authority scores
+(respectively, null hub scores) correspond to isolated nodes
+in the graph whose adjacency matrix is the authority matrix
+A (respectively, the hub matrix H).
+An advantage of HITS with respect to PageRank is that it
+
+provides two scores at the price of one. The user is hence
+provided with two rankings: the most authoritative pages
+about the research topic, which can be exploited to investigate in depth a research subject, and the most hubby pages,
+which correspond to portal pages linking to the research
+topic from which a broad search can be started. A disadvantage of HITS is the higher susceptibility of the method to
+spamming: while it is difficult to add incoming links to our
+favourite page, the addition of outgoing links is much easier. This leads to the possibility of purposely inflating the
+hub score of a page, indirectly influencing also the authority
+scores of the pointed pages.
+An following algorithm that incorporates ideas from both
+PageRank and HITS is SALSA [16]: like HITS, SALSA computes both authority and hub scores, and like PageRank,
+these scores are obtained from Markov chains.
+
+5.2 Bibliometrics
+Bibliometrics, also known as scientometrics, is the quantitative study of the process of scholarly publication of research
+achievements. The most mundane aspect of this branch of
+information and library science is the design and application of bibliometric indicators to determine the influence of
+bibliometric units like scholars and academic journals. The
+Impact Factor is, undoubtedly, the most popular and controversial journal bibliometric indicator available at the moment. It is defined, for a given journal and a fixed year,
+as the mean number of citations in the year to papers published in the two previous years. It has been proposed in
+1963 by Eugene Garfield, the founder of the Institute for Scientific Information (ISI), working together with Irv Sher [7].
+Journal Impact Factors are currently published in the popular Journal Citation Reports by Thomson-Reuters, the new
+owner of the ISI.
+The Impact Factor does not take into account the importance of the citing journals: citations from highly reputed
+journals are weighted as those from obscure journals. In
+1976 Gabriel Pinski and Francis Narin developed an innovative journal ranking method [25]. The method measures the
+influence of a journal in terms of the influence of the citing
+journals. The Pinski and Narin thesis is:
+
+A journal is influential if it is cited by other influential journals.
+
+This is the same circular thesis of the PageRank method.
+Given a source time window T1 and a previous target time
+window T2 , the journal citation system can be viewed as
+a weighted directed graph in which nodes are journals and
+there is an edge from journal i to journal j if there is some
+article published in i during T1 that cites an article published
+in j during T2 . The edge is weighted with
+P the number ci,j
+of such citations from i to j. Let ci = j ci,j be the total
+number of cited references of journal i.
+In the method described by Pinski and Narin, a citation matrix H = (hi,j ) is constructed such that hi,j = ci,j /cj . The
+coefficient hi,j is the amount of citations received by journal
+j from journal i per reference given out by journal j. For
+
+1
+5
+A
+28.0
+
+8
+5
+
+B
+44.7
+
+D
+14.9
+
+10
+8
+
+5
+C
+12.4
+
+Figure 3: An instance with solution of the journal ranking method proposed by Pinski and Narin.
+Nodes are labelled with influence scores and edges
+with the citation flow between journals. Scores have
+been normalized to sum to 100.
+
+each journal an influence score is determined which measures the relative journal performance per given reference.
+The influence score πj of journal j is defined as:
+X
+X ci,j
+πi hi,j
+πi
+=
+πj =
+cj
+i
+i
+or, in matrix notation:
+
+π = πH
+
+(4)
+
+Hence, journals j with a large total influence πj cj are those
+that receive significant endorsements from influential journals. Notice that the influence per reference score πj of a
+journal j is a size independent measure, since the formula
+normalizes by the number of cited references cj contained in
+articles of the journal, which is an estimation of the size of
+the journal. Moreover, the normalization neutralizes the effect of journal self-citations, that are citations between articles in the same journal. These citations are indeed counted
+both at the numerator and at the denominator of the influence score formula. This avoids over inflating journals that
+engage in the practice of opportunistic self-citations.
+It can be proved that the spectral radius of matrix H is
+1, hence the influence score vector corresponds to the dominant eigenvector of H [8]. In principle, the uniqueness of the
+solution and the convergence of the power method to it are
+not guaranteed. Nevertheless, both properties are not difficult to obtain in real cases. If the citation graph is strongly
+connected, then the solution is unique. When journals belong to the same research field, this condition is typically
+satisfied. Moreover, if there exists a self-loop in the graph,
+that is an article that cites an article in the same journal,
+then the power method converges.
+Figure 3 provides an example of the Pinski and Narin method.
+Notice that the graph is strongly connected and has a selfloop, hence the solution is unique and can be computed with
+the power method. Both journals A and C receive the same
+number of citations and give out the same number of references. Nevertheless, the influence of A is bigger, since it is
+cited by a more influential journal (B instead of D). Furthermore, A and D receive the same number of citations from
+the same journals, but D is larger than A, since it contains
+more references, hence the influence of A is higher.
+Similar recursive methods have been independently proposed
+
+by [18] and [22] in the context of ranking of economics journals. Recently, various PageRank-inspired bibliometric indicators to evaluate the importance of journals using the
+academic citation network have been proposed and extensively tested: journal PageRank [2], Eigenfactor [33], and
+SCImago [27].
+
+5.3 Sociometry
+Sociometry, the quantitative study of social relationships,
+contains remarkably old PageRank predecessors. Sociologists were the first to use the network approach to investigate the properties of groups of people related in some way.
+They devised measures like indegree, closeness, betweeness,
+as well as eigenvector centrality which are still used today
+in modern (not necessarily social) network analysis [20]. In
+particular, eigenvector centrality uses the same central ingredient of PageRank applied to a social network:
+A person is prestigious if he is endorsed by prestigious people.
+John R. Seeley in 1949 is probably the first in this context
+to use the circular argument of PageRank [28]. Seeley reasons in terms of social relationships among children: each
+child chooses other children in a social group with a nonnegative strength. The author notices that the total choice
+strengths received by each children is inadequate as an index of popularity, since it does not consider the popularity
+of the chooser. Hence, he proposes to define the popularity
+of a child as a function of the popularity of those children
+who chose the child, and the popularity of the choosers as a
+function of the popularity of those who chose them and so
+in an “indefinitely repeated reflection”. Seeley exposes the
+problem in terms of linear equations and uses Cramer’s rule
+to solve the linear system. He does not discuss the issue of
+uniqueness.
+Another model is proposed in 1953 by Leo Katz [10]. Katz
+views a social network as a directed graph where nodes are
+people and person i is connected by an edge to person j if
+i chooses, or endorses, j. The status of member i is defined
+as the number of weighted paths reaching j in the network,
+a generalization of the indegree measure. Long paths are
+weighted less than short ones, since endorsements devalue
+over long chains. Notice that this method indirectly takes
+account of who endorses as well as how many endorse an
+individual: if a node i points to a node j and i is reached
+by many paths, then the paths leading to i arrive also at j
+in one additional step.
+Katz builds an adjacency matrix L = (li,j ) such that li,j = 1
+if person i chooses person
+j and li,j = 0 otherwise. He deP
+k
+fines a matrix W = ∞
+k=1 (aL) , where a is an attenuation
+constant. Notice that the (i, j) component of Lk is the number of paths of length k from i to j, and this number is attenuated by ak in the computation of W . Hence, the (i, j)
+component of the limit matrix W is the weighted number of
+arbitrary
+Ppaths from i to j. Finally, the status of member j
+is πj = i wi,j , that is, the number of weighted paths reaching j. If the attenuation factor a < 1/ρ(L), with ρ(L) the
+spectral radius of L, then the above series for W converges.
+
+I
+0.0
+0.0
+
+H
+0.0
+0.0
+
+L
+0.0
+0.0
+
+M
+0.0
+0.0
+
+E
+3.2
+30.1
+
+F
+2.9
+7.9
+
+D
+2.9
+7.9
+
+B
+46.4
+39.6
+
+C
+41.9
+8.8
+
+A
+2.7
+5.7
+
+G
+0.0
+0.0
+
+Figure 4: An example of the Katz model using two
+attenuation factors: a = 0.9 and a = 0.1 (the spectral
+radius of the adjacency matrix L is 1). Each node
+is labelled with the Katz score corresponding to a =
+0.9 (top) and a = 0.1 (bottom). Scores have been
+normalized to sum to 100.
+
+Figure 4 illustrates the method with an example. Notice the
+important role of the attenuation factor: when it is large
+(close to 1/ρ(L)), long paths are devalued smoothly, and
+Katz scores are strongly correlated with PageRank ones. In
+the shown example, PageRank and Katz methods provide
+the same ranking of nodes when the attenuation factor is
+0.9. On the other hand, if the attenuation factor is small
+(close to 0), then the contribution given by paths longer
+than 1 rapidly declines, and thus Katz scores converge to
+indegrees, the number of incoming links of nodes. In the
+example, when the attenuation factor drops to 0.1, nodes C
+and E switch their positions in the ranking: node E, which
+receives many short paths, significantly increases its score,
+while node C, which is the destination of just one short path
+and many (devalued) long ones, significantly decreases its
+score.
+In 1965 Charles H. Hubbell generalizes the proposal of Katz [9].
+Given a set of members of a social context, Hubbell defines
+a matrix W = (wi,j ) such that wi,j is the strength at which
+i endorses j. Interestingly, these weights can be arbitrary,
+and in particular, they can be negative. The prestige of a
+member is recursively defined in terms of the prestige of the
+endorsers and takes account of the endorsement strengths:
+
+π = πW +v
+
+(5)
+
+0.6
+Charles
+0.2
+
+Alice
+0.49
+
+0.8
+
+-0.4
+0.4
+0.4
+
+0.1
+
+Bob
+0.41
+
+-0.4
+
+David
+-0.9
+
+-0.1
+
+Figure 5: An instance of the Hubbell model with
+solution: each node is labelled with its prestige
+score and each edge is labelled with the endorsement
+strength between the connected members; negative
+strength is highlighted with dashed edges. The minimal amount of status has been fixed to 0.2 for all
+members.
+
+The term v is an exogenous vector such that vi is a minimal
+amount of status assigned to i from outside the system.
+The original aspects of the method are the presence of an
+exogenous initial input and the possibility of giving negative endorsements. A consequence of negative endorsements
+is that the status of an actor can also be negative. An actor that receives a positive (respectively, negative) judgment
+from a member of positive status increases (respectively, decreases) his prestige. On the other hand, and interestingly,
+receiving a positive judgment from a member of negative
+status makes a negative contribution to the prestige of the
+endorsed member (if you are endorsed by some person affiliated to the Mafia your reputation might drop indeed).
+Moreover, receiving a negative endorsement from a member of negative status makes a positive contribution to the
+prestige of the endorsed person (if the same Mafioso opposes
+you, then your reputation might raise).
+Figure 5 shows an example for the Hubbell model. Notice
+that Charles does not receive any endorsement and hence
+has the minimal amount of status given by default to each
+member. David receives only negative judgments; interestingly, the fact that he has a positive self opinion further
+decreases his status. A better strategy for him, knowing in
+advance of his negative status, would be to negatively judge
+himself, acknowledging the negative judgment given by the
+other members.
+Equation 5 is equivalent to π(I − W ) = v, P
+where I is the
+i
+identity matrix, that is π = v(I − W )−1 = v ∞
+i=0 W . The
+series converge if and only if the spectral radius of W is less
+than 1. It is now clear that the Hubbell model is a generalization of the Katz model to general matrices that adds an
+initial exogenous
+P input v.i Indeed, Katz equation for social
+status is π = e ∞
+i=1 (aL) , where e is a vector of all ones. In
+an unpublished note Vigna traces the history of the mathematics of spectral ranking and shows that there is a reduction from the path summation formulation of Hubbell-Katz
+to the eigenvector formulation with teleportation of PageRank and vice versa [29]. In the mapping the attenuation
+constant is the counterpart of the PageRank damping factor, and the exogenous vector corresponds to the PageRank
+personalization vector. The interpretation of PageRank as
+a sum of weighted paths is also investigated in [1].
+
+Spectral ranking methods have been also exploited to rank
+sport teams in competitions that involve teams playing in
+pairs [31, 12]. The underlying idea is that a team is strong
+if it won against other strong teams. Much of the art of the
+sport ranking problem is how to define the matrix entries
+ai,j expressing how much team i is better than team j (e.g.,
+we could pick ai,j to be 1 if j beats i, 0.5 if the game ended
+in a tie, and 0 otherwise) [11].
+
+5.4 Econometrics
+We conclude with a succinct description of the input-output
+model developed in 1941 by Nobel Prize winner Wassily W.
+Leontief in the field of econometrics – the quantitative study
+of economic principles [17]. According to the Leontief inputoutput model, the economy of a country may be divided into
+any desired number of sectors, called industries, each consisting of firms producing a similar product. Each industry
+requires certain inputs in order to produce a unit of its own
+product, and sells its products to other industries to meet
+their ingredient requirements. The aim is to find prices for
+the unit of product produced by each industry that guarantee the reproducibility of the economy, which holds when
+each sector balances the costs for its inputs with the revenues of its outputs. In 1973, Leontief earned the Nobel
+Prize in economics for his work on the input-output model.
+An example is provided in Table 2.
+Let qi,j denote the quantity produced by the ith industry
+and used by the jth industry, and qP
+i be the total quantity
+produced by sector i, that is, qi = j qi,j . Let A = (ai,j )
+be such that ai,j = qi,j /qj ; each coefficient ai,j represents
+the amount of product (produced by industry) i consumed
+by industry j that is necessary to produce a unit of product
+j. Let πj be the price for the unit of product produced by
+each industry j. The reproducibility of the economy holds
+when each sector j balances the costs for its inputs with the
+revenues of its outputs, that is:
+P
+cost j
+= Pi πi qi,j =
+P
+revenue j =
+i qj,i = πj qj
+i πj qj,i = πj
+By dividing each balance equation by qj we have
+X qi,j
+X
+πi
+πj =
+πi ai,j
+=
+qj
+i
+i
+or, in matrix notation,
+π = πA
+
+(6)
+
+Hence, highly remunerated industries (industries j with high
+total revenue πj qj ) are those that receive substantial inputs
+from highly remunerated industries, a circularity that closely
+resembles the PageRank thesis [24]. With the same argument used in [8] for the Pinski and Narin bibliometric model
+we can show that the spectral radius of matrix A is 1, thus
+the equilibrium price vector π is the dominant eigenvector of
+matrix A. Such a solution always exists, although it might
+not be unique, unless A is irreducible. Notice the striking
+similarity of the Leontief closed model with that proposed
+by Pinski and Narin. An open Leontief model adds an exogenous demand and creates a surplus of revenue (profit). It
+is described by the equation π = πA+v where v is the profit
+vector. Hubbell himself observes the similarity between his
+model and the Leontief open model [9].
+
+agriculture
+industry
+family
+cost
+
+agriculture
+7.5
+14
+80
+600
+
+industry
+6
+6
+180
+750
+
+family
+16.5
+30
+40
+900
+
+total
+30
+50
+300
+
+price
+20
+15
+3
+
+revenue
+600
+750
+900
+
+Table 2: An input-output table for an economy with three sectors with the balance solution. Each row shows
+the output of a sector to other sectors of the economy. Each column shows the inputs received by a sector
+from other sectors. For each sector we also show total quantity produced, equilibrium unitary price, total
+cost, and total revenue. Notice that each sector balances costs and revenues.
+It might seem disputable to juxtapose PageRank and Leontief methods. To be sure, the original motivation of Leontief
+work was to give a formal method to find equilibrium prices
+for the reproducibility of the economy and to use the method
+to estimate the impact on the entire economy of the change
+in demand in any sectors of the economy. Leontief, to the
+best of our limited knowledge, was not motivated by an industry ranking problem. On the other hand, the motivation
+underlying the other methods described in this paper is the
+ranking of a set of homogeneous entities. Despite the original motivations, however, there are more than coincidental similarities between the Leontief open and closed models and the other ranking methods described in this paper.
+These connections motivated the discussion of the Leontief
+contribution, which is probably the least known among the
+surveyed methods within the computing community.
+
+6.
+
+CONCLUSION
+
+The classic notion of quality of information is related to the
+judgment given by few field experts. PageRank introduced
+an original notion of quality of information found on the
+Web: the collective intelligence of the Web, formed by the
+opinions of the millions of people that populate this universe,
+is exploited to determine the importance, and ultimately the
+quality, of that information.
+Consider the difference between expert evaluation and collective evaluation. The former tends to be intrinsic, subjective,
+deep, slow and expensive. By contrast, the latter is typically extrinsic, democratic, superficial, fast and low-cost.
+Interestingly, the dichotomy between these two evaluation
+methodologies is not peculiar to information found on the
+Web. In the context of assessment of academic research,
+peer review – the evaluation of scholar publications given
+by peer experts working in the same field of the publication
+– plays the role of expert evaluation. Collective evaluation
+consists in gauging the importance of a contribution though
+the bibliometric practice of counting and analysing citations
+received by the publication from the academic community.
+Citations generally witness the use of information and acknowledge intellectual debt. Eigenfactor [33], a PageRankinspired bibliometric indicator, is among the most interesting recent proposals to collectively evaluate the status of
+academic journals. The consequences of a shift from peer
+review to bibliometric evaluation are currently heartily debated in the academic community [32].
+Acknowledgements
+The author thanks Enrico Bozzo, Sebastiano Vigna, and the
+
+anonymous referees for positive and critical comments on the
+early drafts of this paper. Sebastiano Vigna was the first to
+point out the contribution of John R. Seeley.
+
+7. REFERENCES
+[1] R. A. Baeza-Yates, P. Boldi, and C. Castillo. Generic
+damping functions for propagating importance in
+link-based ranking. Internet Mathematics,
+3(4):445–478, 2007.
+[2] J. Bollen, M. A. Rodriguez, and H. V. de Sompel.
+Journal status. Scientometrics, 69(3):669–687, 2006.
+[3] S. Brin and L. Page. The anatomy of a large-scale
+hypertextual web search engine. Computer networks
+and ISDN systems, 30(1-7):107–117, 1998.
+[4] A. Z. Broder, R. Kumar, F. Maghoul, P. Raghavan,
+S. Rajagopalan, R. Stata, A. Tomkins, and J. L.
+Wiener. Graph structure in the Web. Computer
+Networks, 33(1-6):309–320, 2000.
+[5] V. Bush. As we may think. Atlantic Monthly,
+176(1):101–108, 1945.
+[6] G. Frobenius. Über matrizen aus nicht negativen
+elementen. In Sitzungsberichte der Preussischen
+Akademie der Wissenschaften zu Berlin, pages
+456–477, 1912.
+[7] E. Garfield and H. Sher. New factors in the evaluation
+of scientific literature through citation indexing.
+American Documentation, 14:195–201, 1963.
+[8] N. L. Geller. On the citation influence methodology of
+Pinski and Narin. Information Processing &
+Management, 14(2):93 – 95, 1978.
+[9] C. H. Hubbell. An input-output approach to clique
+identification. Sociometry, 28:377–399, 1965.
+[10] L. Katz. A new status index derived from sociometric
+analysis. Psychometrika, 18:39–43, 1953.
+[11] J. P. Keener. The Perron-Frobenius theorem and the
+ranking of football teams. SIAM Review, 35(1):80–93,
+1993.
+[12] M. G. Kendall. Further contributions to the theory of
+paired comparisons. Biometrics, 11(1):43–62, 1955.
+[13] J. M. Kleinberg. Authoritative sources in a
+hyperlinked environment. In ACM-SIAM Symposium
+on Discrete Algorithms, pages 668–677, 1998.
+[14] J. M. Kleinberg. Authoritative sources in a
+hyperlinked environment. Journal of the ACM,
+46(5):604–632, 1999.
+[15] A. N. Langville and C. D. Meyer. Google’s PageRank
+and Beyond: The Science of Search Engine Rankings.
+Princeton University Press, 2006.
+[16] R. Lempel and S. Moran. The stochastic approach for
+
+[17]
+[18]
+
+[19]
+
+[20]
+[21]
+
+[22]
+[23]
+[24]
+
+[25]
+
+[26]
+
+[27]
+
+[28]
+
+[29]
+[30]
+
+[31]
+[32]
+
+[33]
+
+[34]
+
+link-structure analysis (SALSA) and the TKC effect.
+Computer Networks, 33(1-6):387–401, 2000.
+W. W. Leontief. The Structure of American Economy,
+1919-1929. Harvard University Press, 1941.
+S. J. Liebowitz and J. P. Palmer. Assessing the
+relative impacts of economics journals. Journal of
+Economic Literature, 22:77–88, 1984.
+A. Markov. Rasprostranenie zakona bol’shih chisel na
+velichiny, zavisyaschie drug ot druga. Izvestiya
+Fiziko-matematicheskogo obschestva pri Kazanskom
+universitete, 2-ya seriya 15(94):135–156, 1906.
+M. E. J. Newman. Network analysis: An introduction.
+Oxford University Press, 2010.
+L. Page, S. Brin, R. Motwani, and T. Winograd. The
+PageRank citation ranking: Bringing order to the
+Web. Technical Report 1999-66, Stanford InfoLab,
+November 1999. Retrieved June 1, 2010, from
+http://ilpubs.stanford.edu:8090/422/.
+I. Palacios-Huerta and O. Volij. The measurement of
+intellectual influence. Econometrica, 72:963–977, 2004.
+O. Perron. Zur theorie der matrices. Mathematische
+Annalen, 64(2):248–263, 1907.
+S. U. Pillai, T. Suel, and S. Cha. The
+Perron-Frobenius theorem: some of its applications.
+IEEE Signal Processing Magazine, 22(2):62–75, 2005.
+G. Pinski and F. Narin. Citation influence for journal
+aggregates of scientific publications: Theory, with
+application to the literature of physics. Information
+Processing & Management, 12(5):297 – 312, 1976.
+R Development Core Team. R: A Language and
+Environment for Statistical Computing. R Foundation
+for Statistical Computing, Vienna, Austria, 2007.
+ISBN 3-900051-07-0. Accessed June 1, 2010, at
+http://www.R-project.org.
+SCImago. SJR – SCImago Journal & Country Rank.
+Accessed June 1, 2010, at
+http://www.scimagojr.com, 2007.
+J. R. Seeley. The net of reciprocal influence: A
+problem in treating sociometric data. The Canadian
+Journal of Psychology, 3:234–240, 1949.
+S. Vigna. Spectral ranking, 2010. Retrieved June 1,
+2010 from http://arxiv.org/abs/0912.0238.
+R. von Mises and H. Pollaczek-Geiringer. Praktische
+verfahren der gleichungsauflösung. Zeitschrift für
+Angewandte Mathematik und Mechanik, 9:58–77,
+152–164, 1929.
+T. H. Wei. The algebraic foundations of ranking
+theory. PhD thesis, Cambridge University, 1952.
+P. Weingart. Impact of bibliometrics upon the science
+system: inadvertent consequences? Scientometrics,
+62(1):117–131, 2005.
+J. West, B. Althouse, C. Bergstrom, M. Rosvall, and
+T. Bergstrom. Eigenfactor.org – Ranking and mapping
+scientific knowledge. Accessed June 1, 2010, at
+http://www.eigenfactor.org, 2007.
+A. X. Zheng, A. Y. Ng, and M. I. Jordan. Stable
+algorithms for link analysis. In International ACM
+SIGIR Conference on Research and Development in
+Information Retrieval, pages 258–266, 2001.
+
+
