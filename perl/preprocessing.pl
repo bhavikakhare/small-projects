@@ -27,7 +27,7 @@ close(STOPWORDS);
 # fine & open & loop over all files in hw4 directory
 
 my @files = <$folder/*.txt> ;
-opendir(F, $folder) or die "could not open $folder\n" ;
+# opendir( F, $folder ) or die "could not open $folder\n" ;
 
 foreach my $file (@files) {
 # while ( $file = readdir(F) ) {
