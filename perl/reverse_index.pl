@@ -55,7 +55,7 @@ foreach $word ( sort keys %frequencies ) {
                 $file_name = substr($file_name,index($file_name,'/')+1,-4) ;
 
                 $size = $size +1 ;
-                $output = "$output\t$file_name: $frequencies{$word}{$file};\t" ;
+                $output = "$output$file_name: $frequencies{$word}{$file};\t" ;
                 # $sum = $frequencies{$word}{$file} + $sum ;
             }
         }
