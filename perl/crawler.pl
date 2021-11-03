@@ -1,3 +1,7 @@
+# program to crawl UoM homepage and collect 10000 pages with >50 words and save their text and preprocessed versions
+# create a hw6_output_text & hw6_output_preprocessed folder 
+# run with "perl crawler.pl"
+
 use warnings;
 use strict;
 
@@ -84,11 +88,11 @@ sub crawl {
 
     # if pdf - i could not code this yet
 
-    # if ( $link =~ m/pdf/ ) { # add else
+    if ( $link =~ m/pdf/ ) { # add else
 
-    #     return 0 ;
+        return 0 ;
 
-    # }
+    }
 
     # get content
 
@@ -110,10 +114,10 @@ sub crawl {
     $page_text =~ tr/[A-Z]/[a-z]/;
 
     # replace everything but alphabets to |n AND remove multiple consecutive occurrences of \n :)
-    $page_text =~ tr/a-z/\n/cs;
+    $page_text =~ tr/a-z/ /cs;
 
     # split this string of many words into an array of words
-    my @words = split( '\n', $page_text );
+    my @words = split( ' ', $page_text );
     $count = scalar @words ;
     if( $count >= 50 ) {
         print "VALID: #word: $count\n" ;
