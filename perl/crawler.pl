@@ -1,4 +1,4 @@
-# program to crawl UoM homepage and collect 10000 pages with >50 words and save their text and preprocessed versions
+# program to crawl the UoM homepage and collect 10000 pages with >50 words and save their text and preprocessed versions
 # create a hw6_output_text & hw6_output_preprocessed folder 
 # run with "perl crawler.pl"
 
