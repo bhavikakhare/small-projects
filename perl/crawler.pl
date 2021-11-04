@@ -1,19 +1,19 @@
 # program to crawl the UoM homepage and collect 10000 pages with >50 words and save their text and preprocessed versions
-# create a hw6_output_text & hw6_output_preprocessed folder 
+# create a hw6_output_text folder 
 # run with "perl crawler.pl"
 
 use warnings;
 use strict;
 
 use LWP::UserAgent;
+use LWP::Simple;
 use WWW::Mechanize;
 use HTML::Strip;
+use File::Slurp;
+use URI;
+my $ua = new LWP::UserAgent;
 use List::MoreUtils qw/uniq/; # to change mechanise link objects to array of urls
 
-
-# get the webpage
-
-my $ua = new LWP::UserAgent;
 $ua->timeout(120);
 
 my $url = 'https://www.cs.memphis.edu/~vrus/teaching/ir-websearch/';
@@ -24,23 +24,25 @@ my $mech = WWW::Mechanize->new();
 # $mech->get($url);
 
 my $docu_count = 0 ;
-my $goal = 5 ;
+my $goal = 10000 ;
 my @documents = ( $url ) ;
 my %crawled ;
 my $current_url ;
 my @link_objects ;
 my @links_onpage ;
-my $stopper = 5 ;
+# my $stopper = 100 ;
 
 # make variable names meaningful and add comments and spaces
+        # open( ERRORREPORT , '>>', "crawl_error_report.txt" )
+        #     or die("can not open output file for crawl_error_report.txt to print it \n\n");
+open STDOUT,'>','error_report.txt' or die "can't open output" ;
 
-# while( $docu_count<=$goal && $stopper > 0 ) {
-while( $docu_count<=$goal ) {
-
-    $stopper--; 
+# while( $docu_count<$goal && $stopper > 0 ) { $stopper--; 
+while( $docu_count<$goal ) {
 
     # pick a url and mark it crawled
-    $current_url = pop @documents ;
+    $current_url = shift @documents ;
+    if( exists($crawled{$current_url}) && $crawled{$current_url} == 1 ) { next ; }
     print "\ncurrent $current_url\n" ;
     $crawled{$current_url} = 1 ;
 
@@ -49,22 +51,31 @@ while( $docu_count<=$goal ) {
         $mech->get($current_url);
         @link_objects = $mech->find_all_links();
         @links_onpage = uniq( map { $_->url } @link_objects ); # later remove this uniq -> it is already done later
-        @links_onpage = grep {!((/\.ppt$/)|(/mailto/))}@links_onpage ;
+        @links_onpage = grep {!((/\.ppt$/)|(/\.js$/)|(/\.css$/)|(/\.json$/)|(/mailto/))}@links_onpage ;
+        # @links_onpage = grep {(m/html$/)|(m/pdf$/)|(m/txt$/)|(m/php$/)}@links_onpage ;
     } ;
     if($@) { 
         print "\t error $@" ; 
+        # print ERRORREPORT "\t couldn't get links from $current_url error $@\n\n" ;
+        # skip this link or continue or sth
         @link_objects = () ;
         @links_onpage = () ;
-    }
-    foreach my $link(@links_onpage) {
-        unless ( $link =~ /^http?:\/\//i || $link =~ /^https?:\/\//i ) {
-            $link = "$url" . $link ; # format links
-        }
+        next;
     }
     my $ct1 = scalar @documents ;
-    my $ct2 = scalar @links_onpage ;
-    print "q-size = $ct1 + $ct2\n" ;
-    push( @documents , @links_onpage ) ;
+    # my $ct2 = scalar @links_onpage ;
+    print "q-size : $ct1 " ;
+    foreach my $link(@links_onpage) {
+        unless ( $link =~ /^http?:\/\//i || $link =~ /^https?:\/\//i ) {
+            $link = URI->new_abs( $link , $current_url ) ;
+        }
+        if ( exists($crawled{$link}) && $crawled{$link} == 1 ) { next ; }
+        else { push( @documents , $link ) ; }
+    }
+    my $ct2 = scalar @documents ;
+    $ct2 = $ct2 - $ct1 ;
+    print "+ $ct2\n" ;
+    # push( @documents , @links_onpage ) ;
     @documents = uniq @documents ;
     # used uniq instead of checking if already in docs to avoid a loop
 
@@ -84,19 +95,22 @@ sub crawl {
 
     my $link = shift ;
     my $docu_count = shift ;
-    print "crawling $link\n" ;
+    my $page_text ;
+    print "crawling ... ... ... ...\n" ;
 
     # if pdf - i could not code this yet
 
-    if ( $link =~ m/pdf/ ) { # add else
+    if ( $link =~ m/pdf$/ ) {
+        
+        # getstore( "pdf_file.pdf" , $link );
+        my $mech = WWW::Mechanize->new;
+        $mech->get( $link, ":content_file" => "pdf_file.pdf" );
+        system q[ pdftotext.exe "pdf_file.pdf" ] ;
+        $page_text = read_file("pdf_file.txt") ;
+        unlink "pdf_file.pdf" ;
+        unlink "pdf_file.txt" ;
 
-        return 0 ;
-
-    }
-
-    # get content
-
-    # } else {
+    } else {
 
         my $request = new HTTP::Request( 'GET', $link );
         my $response = $ua->request($request);
@@ -105,10 +119,10 @@ sub crawl {
         die "\t Couldn't get content ! :( \n\n" unless defined $content;
         # strip the HTML tags from it to get pure text
         my $hs = HTML::Strip->new();
-        my $page_text = $hs->parse($content);
+        $page_text = $hs->parse($content);
         $hs->eof;
 
-    # }
+    }
 
     # make everything lowercase
     $page_text =~ tr/[A-Z]/[a-z]/;
@@ -126,22 +140,18 @@ sub crawl {
         open( FILEOUT , '>', "hw6_output_text/text_$docu_count.txt" )
             or die("can not open output file for text_$docu_count to print it \n\n");
         print FILEOUT "$page_text" ;
-        print "$link+\n" ;
+        print "$link\n" ;
         open( FILEINDEX , '>>', "file_url_index.txt" )
             or die("can not open output file for file_url_index.txt to print it \n\n");
-        print FILEINDEX "$docu_count\t$link\n" ;
+        print FILEINDEX "$docu_count\n" ;
         return 1 ;
     } else {
-        print "INVALID: #word: $count\n" ;
+        print "INVALID: #word:$count<50\n" ;
+        # print ERRORREPORT "INVALID: #word:$count<50\t$link\n\n" ;
     }
 
     return 0 ;
 
-    # text file \n to space
-
     # figure out pdf to text
-
-    # if enough words then save file & count++
-    # save filename to table with url
 
 }
