@@ -152,6 +152,4 @@ sub crawl {
 
     return 0 ;
 
-    # figure out pdf to text
-
 }
