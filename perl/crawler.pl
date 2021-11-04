@@ -16,7 +16,8 @@ use List::MoreUtils qw/uniq/; # to change mechanise link objects to array of url
 
 $ua->timeout(120);
 
-my $url = 'https://www.cs.memphis.edu/~vrus/teaching/ir-websearch/';
+# my $url = 'https://www.cs.memphis.edu/~vrus/teaching/ir-websearch/';
+my $url = 'https://www.memphis.edu/index.php#';
 
 # get links from webpage & store in LinkedList
 
@@ -51,8 +52,9 @@ while( $docu_count<$goal ) {
         $mech->get($current_url);
         @link_objects = $mech->find_all_links();
         @links_onpage = uniq( map { $_->url } @link_objects ); # later remove this uniq -> it is already done later
-        @links_onpage = grep {!((/\.ppt$/)|(/\.js$/)|(/\.css$/)|(/\.json$/)|(/mailto/))}@links_onpage ;
+        @links_onpage = grep {(m/memphis\.edu/)&(!((/\.ppt$/)|(/\.js$/)|(/\.css$/)|(/\.json$/)|(/mailto/)))}@links_onpage ;
         # @links_onpage = grep {(m/html$/)|(m/pdf$/)|(m/txt$/)|(m/php$/)}@links_onpage ;
+        # @links_onpage = grep {(m/memphis\.edu/)&((m/html$/)|(m/pdf$/)|(m/txt$/))}@links_onpage ;
     } ;
     if($@) { 
         print "\t error $@" ; 
@@ -143,7 +145,7 @@ sub crawl {
         print "$link\n" ;
         open( FILEINDEX , '>>', "file_url_index.txt" )
             or die("can not open output file for file_url_index.txt to print it \n\n");
-        print FILEINDEX "$docu_count\n" ;
+        print FILEINDEX "$docu_count\t$link\n" ;
         return 1 ;
     } else {
         print "INVALID: #word:$count<50\n" ;
