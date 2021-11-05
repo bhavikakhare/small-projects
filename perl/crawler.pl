@@ -44,8 +44,10 @@ while( $docu_count<$goal ) {
     # pick a url and mark it crawled
     $current_url = shift @documents ;
     if( exists($crawled{$current_url}) && $crawled{$current_url} == 1 ) { next ; }
-    print "\ncurrent $current_url\n" ;
+    # my $url_URI = URI->new( $current_url );
+    # my $domain = $url_URI->host;
     $crawled{$current_url} = 1 ;
+    print "\ncurrent $current_url\n" ;
 
     # add all its links to document array if not crawled or already in docs
     my $temp = eval { 
@@ -53,6 +55,7 @@ while( $docu_count<$goal ) {
         @link_objects = $mech->find_all_links();
         @links_onpage = uniq( map { $_->url } @link_objects ); # later remove this uniq -> it is already done later
         @links_onpage = grep {(m/memphis\.edu/)&(!((/\.ppt$/)|(/\.js$/)|(/\.css$/)|(/\.json$/)|(/mailto/)))}@links_onpage ;
+        # idk how to prevent fb/ig links iwth memphis.edu in them
         # @links_onpage = grep {(m/html$/)|(m/pdf$/)|(m/txt$/)|(m/php$/)}@links_onpage ;
         # @links_onpage = grep {(m/memphis\.edu/)&((m/html$/)|(m/pdf$/)|(m/txt$/))}@links_onpage ;
     } ;
@@ -105,10 +108,18 @@ sub crawl {
     if ( $link =~ m/pdf$/ ) {
         
         # getstore( "pdf_file.pdf" , $link );
-        my $mech = WWW::Mechanize->new;
-        $mech->get( $link, ":content_file" => "pdf_file.pdf" );
-        system q[ pdftotext.exe "pdf_file.pdf" ] ;
-        $page_text = read_file("pdf_file.txt") ;
+        my $temp = eval { 
+            my $mech = WWW::Mechanize->new;
+            $mech->get( $link, ":content_file" => "pdf_file.pdf" );
+            system q[ pdftotext.exe "pdf_file.pdf" ] ;
+            $page_text = read_file("pdf_file.txt") ;
+        } ;
+        if($@) { 
+            print "\t error $@" ;
+            unlink "pdf_file.pdf" ;
+            unlink "pdf_file.txt" ;
+            return 0 ;
+        }
         unlink "pdf_file.pdf" ;
         unlink "pdf_file.txt" ;
 
