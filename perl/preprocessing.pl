@@ -1,4 +1,5 @@
 # WAP2 preprocess text in input folder & remove stopwords from english_stopwords.txt BY B KHARE :)
+# put stopwords_file in input folder & have ip & op folders in same directory
 # run in cmd with "perl preprocessing.pl hw4_input" and have hw4_input(text-files) & hw5_input(empty) preferably be existing directories in the same directory as preprocessing.pl
 use warnings;
 use strict;
@@ -11,6 +12,7 @@ my $stemmer = Lingua::Stem->new( -locale => 'EN-UK' ) ;
 # find the file of stopwords and store stopwords in a list 
 
 my $folder = shift @ARGV;
+my $destination_folder = shift @ARGV ;
 my $stopwords_file = "$folder/english_stopwords.txt" ;
 my @stopwords ;
 my $file ;
@@ -27,7 +29,7 @@ close(STOPWORDS);
 # fine & open & loop over all files in hw4 directory
 
 my @files = <$folder/*.txt> ;
-# opendir( F, $folder ) or die "could not open $folder\n" ;
+opendir(F, $folder) or die "could not open $folder\n" ;
 
 foreach my $file (@files) {
 # while ( $file = readdir(F) ) {
@@ -68,8 +70,9 @@ foreach my $file (@files) {
         $text = join( ' ' , @words ) ;
 
         # save the preprocessed text in hw5_input directory
-        $file = substr $file , 4 ;
-        open( FILEOUT , '>', "hw5_input/$file.txt" )
+        my $folder_name_length = length($folder)+1 ;
+        $file = substr $file , $folder_name_length ;
+        open( FILEOUT , '>', "$destination_folder/$file" )
             or die("can not open output $file to print it \n\n");
         print FILEOUT "$text" ;
 
