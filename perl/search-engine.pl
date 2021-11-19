@@ -1,11 +1,12 @@
 # script to return ranked list of query results for a given query
   use strict;
   use warnings;
+  use File::Slurp;
 
 # read RI file into matrix or sth
 
 my %r_index = () ;
-open FILE, "reverse_index.txt" or die $! ;
+# open FILE, "reverse_index.txt" or die $! ;
 my $key ;
 my $df ;
 my $start_index ;
@@ -13,14 +14,21 @@ my $end_index ;
 my $tf_string ;
 my @hash_values ;
 my $ctr = 0 ;
-while ( my $line = <FILE> ) {
-    chomp($line);
+my $file_content = read_file('reverse_index.txt') ;
+my @array_content = split('\n',$file_content) ;
+
+foreach my $line(@array_content) {
     # chomp($line);
-    $start_index = index( $line , '\t' ) ;
+    # chomp($line);
+    if( $ctr < 2 ) {
+      print("\n$line\n\n");
+      $ctr=$ctr+1 ; 
+    }
+    $start_index = index( $line , ' ' ) ;
     $key = substr $line , 0 , $start_index ;
     # my ($key) = $line =~ /^(.*?)\s/;
     if( $ctr < 2 ) {
-      print("\nPR $start_index x $line") ; 
+      print("\n$start_index x $line") ; 
       $ctr=$ctr+1 ; 
     }
     $line = substr $line , index( $line , '\t' ) +1 ;
@@ -46,7 +54,7 @@ while ( my $line = <FILE> ) {
         $r_index{$key}{ substr $hash_value , 0 , $start_index } = substr $hash_value , ($start_index+1) ;
     }
 }
-close FILE;
+# close FILE;
 
 # ask for query
 
