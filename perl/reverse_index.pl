@@ -1,77 +1,76 @@
-# script to return ranked list of query results for a given query
-  use strict;
-  use warnings;
-  use File::Slurp;
+# reverse_index.pl
+# BY B KHARE :)
 
-# read RI file into matrix or sth
+# run in cmd with "perl reverse_index.pl hw5_input"
 
-my %r_index = () ;
-# open FILE, "reverse_index.txt" or die $! ;
-my $key ;
-my $df ;
-my $start_index ;
-my $end_index ;
-my $tf_string ;
-my @hash_values ;
-my $ctr = 0 ;
-my $file_content = read_file('reverse_index.txt') ;
-my @array_content = split('\n',$file_content) ;
+use warnings;
+use strict;
+use File::Slurp;
 
-foreach my $line(@array_content) {
-    # chomp($line);
-    # chomp($line);
-    if( $ctr < 2 ) {
-      print("\n$line\n\n");
-      $ctr=$ctr+1 ; 
-    }
-    $start_index = index( $line , ' ' ) ;
-    $key = substr $line , 0 , $start_index ;
-    # my ($key) = $line =~ /^(.*?)\s/;
-    if( $ctr < 2 ) {
-      print("\n$start_index x $line") ; 
-      $ctr=$ctr+1 ; 
-    }
-    $line = substr $line , index( $line , '\t' ) +1 ;
-    $df = substr $line , 0 , index( $line , '\t' ) ;
-    # if( $ctr < 2 ) {
-    #   # print("\n $line") ; 
-    #   $ctr=$ctr+1 ; 
-    # }
-    $line = substr $line , index( $line , '\t' ) +1 ;
-    $start_index = index($line,'{') ;
-    $end_index = index($line,'}') ;
-    $tf_string = substr $line , $start_index +1 , $end_index-$start_index -1 ;
-    $tf_string =~ s/\s+//g ;
-    @hash_values = split(';',$tf_string) ;
-    foreach my $hash_value( @hash_values ) {
-        $start_index = index($hash_value,':') ;
-        $end_index = length($hash_value) ;
-        my %new_hash = () ;
-        if( exists($r_index{$key}) ) {
+my $folder = shift @ARGV ;
+my @files = <$folder/*.txt> ;
+my %frequencies = () ;
+my $word ;
+my $file_name ;
+
+
+foreach my $file (@files) {
+
+    %counted = () ;
+
+    my $content = read_file($file) ;
+    my @words = split( ' ', $content ) ;
+
+    while ( $word = pop @words ) {
+
+        # add to that document frequency C
+        if(exists($frequencies{$word})) {
+            $frequencies{$word}{$file}++ ;
         } else {
-          $r_index{$key} =  \%new_hash ;
+            my %new_hash = () ;
+            $frequencies{$word} = \%new_hash ;
+            $frequencies{$word}{$file} =1 ;
         }
-        $r_index{$key}{ substr $hash_value , 0 , $start_index } = substr $hash_value , ($start_index+1) ;
+        # print "$word + $frequencies{$word}{$link} + $link\n" ;
     }
+    print "read $file\n" ;
+
 }
-# close FILE;
 
-# ask for query
+close( FILE_LENGTH ) ;
 
-if( scalar @ARGV > 0 ) {
+open( FILEOUT , '>', "reverse_index.txt" )
+            or die("can not open reverse_index.txt to print to it \n\n");
+my $output = "" ;
 
-} 
+print "indexing\n" ;
 
-# proprocess query
+foreach $word ( sort keys %frequencies ) {
 
-# calculate cosim with all documents each word is in & store in list -> order it
+    # print "\nlooping" ;
+    # print document count
 
-# map file-number to the page-link
+    my $sum = 0 ;
+    my $size = 0 ;
+    $output = "" ;
+    foreach my $file(@files) { # do i need to check if $f($w) is an existing hash ?
+        if(exists($frequencies{$word})) {
+            if( exists($frequencies{$word}{$file}) && $frequencies{$word}{$file}>0 ) {
 
-# print the relevant links
+                # file_name formatting to pretty it up
+                $file_name = $file ;
+                # $file_name = substr( $file_name , index($file_name,'\\') ) ;
+                # $file_name = substr($file_name,index($file_name,'/')+1,-4) ;
+                if ( $file_name =~ /_(\d*)\.txt$/ ) { $file_name = $1 ; }
 
-#####
+                $size = $size +1 ;
+                $output = "$output$file_name: $frequencies{$word}{$file};\t" ;
+                # $sum = $frequencies{$word}{$file} + $sum ;
+            }
+        }
+    }
+    # $size = scalar keys $frequencies{$word} ;
+    print FILEOUT "$word ($size) \t{\t$output}\n" ;
 
-# make an HTML page
+}
 
-# make a form on it &  server
